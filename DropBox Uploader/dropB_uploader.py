@@ -18,19 +18,19 @@ from dropbox.files import WriteMode
 from dropbox.exceptions import ApiError, AuthError
 
 def get_today():
-    formatted_today = dt.date.today().strftime('%Y_%m_%d')
-    return formatted_today
+    today = dt.date.today().strftime('%Y_%m_%d')
+    return today
 
-TODAY = get_today()
+today = get_today()
 
 # Access token da conta
-TOKEN = ''
+TOKEN = 'TOKEN_API'
 
 # Diretório do arquivo local
-LOCALFILE = 'D:/Usuarios/CSV_Files/' + TODAY + '_users.csv'
+LOCALFILE = 'D:/Users/CSV_Files/' + today + '_users.csv'
 
 # Mantenha a '/' antes do diretório do arquivo no DropBox
-BACKUPPATH = '/Usuarios/' + TODAY + '_users.csv'
+BACKUPPATH = '/Users/' + today + '_users.csv'
 
 
 # Faz o upload do arquivo indicado na variável LOCALFILE para o Dropbox
@@ -53,16 +53,15 @@ def backup():
                 sys.exit()
 
 # Função para checar detalhes dos arquivos no diretório do Upload
-def checkFileDetails():
-    print("Checando detalhes do arquivo")
+def checkComponents():
+    print("Checando componentes:")
     for entry in dbx.files_list_folder('').entries:
-        print("Detalhes : ")
-        print(entry.name)
+        print('-->', entry.name)
 
 if __name__ == '__main__':
     # Checa se há um Token de acesso para ser utilizado
     if (len(TOKEN) == 0):
-        sys.exit("ERRO: Parece que você não adicionou o Token de Acesso.")
+        sys.exit("ERRO: Parece não haver nenhum Token de Acesso.")
 
     # Instancia uma classe DropBox, para fazer requisições para a API
     print("Criando um Objeto DropBox...")
@@ -76,11 +75,11 @@ if __name__ == '__main__':
             "ERRO: Token de acesso inválido, tente gerar um novo token de acesso a partir do App Console na página web do DropBox.")
 
     try:
-        checkFileDetails()
+        checkComponents()
     except ApiError as err:
-        sys.exit("Erro enquanto checando detalhes.")
+        sys.exit("Erro enquanto checando componentes.")
 
-    print("Fazendo Upload...")
+    print("\n----- Upload -----")
     # Faz upload do arquivo como um backup do mesmo no DropBox
     backup()
 
